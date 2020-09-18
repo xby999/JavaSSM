@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qianfeng.dao.AudioDao">
+
+
+
+    <!--============管理员模块===============start=============-->
+    <select id="selectallaudioinfo" resultType="com.qianfeng.pojo.Audio">
+        select a.audio_id, a.audio_title, a.audio_date, b.business_username,a.audio_src
+        from audio a,business b where a.business_id=b.business_id and a.audio_flag='true'
+    </select>
+
+    <select id="selectbyusernameanddate" parameterType="hashmap" resultType="com.qianfeng.pojo.Audio">
+        select a.audio_id, a.audio_title, a.audio_date,a.audio_src, b.business_username from audio a,business b where
+        b.business_username=#{business_username} and a.audio_date between #{audio_start_date} and #{audio_end_date}
+    </select>
+
+    <!--已删除音频的信息-->
+    <select id="selectDeleteAudioInfo"  resultType="com.qianfeng.pojo.Audio">
+        select audio_id,audio_title,audio_delete_date
+        from audio  where audio_flag !='true'
+    </select>
+    <!--还原音频-->
+    <update id="adminrebackAudioByID" parameterType="int">
+        update audio set audio_flag='true',audio_delete_date=SYSDATE() where audio_id=#{audio_id}
+    </update>
+    <!--============管理员模块===============end=============-->
+
+
+    <!--============yonghu模块===============start=============-->
+    <insert id="insertAudio" parameterType="com.qianfeng.pojo.Audio" >
+       insert INTO audio(audio_title,audio_src,audio_date,business_id,audio_delete_date)
+        values(#{audio_title},#{audio_src},SYSDATE(),#{business_id},SYSDATE());
+    </insert>
+
+    <select id="selectAudioInfoByID" parameterType="int" resultType="com.qianfeng.pojo.Audio">
+        select a.audio_id,b.business_username,a.audio_title,a.audio_date,a.audio_src
+        from audio a,business b where a.business_id=b.business_id and a.business_id=#{business_id} and a.audio_flag='true'
+    </select>
+
+    <!--删除音频，跟新audio_flag的值-->
+    <update id="deleteAudioByID" parameterType="int">
+       update audio set audio_flag='false',audio_delete_date=SYSDATE() where audio_id=#{audio_id}
+   </update>
+
+    <!--已删除音频的信息-->
+    <select id="selectDeleteAudioInfoByID" parameterType="int" resultType="com.qianfeng.pojo.Audio">
+        select audio_id,audio_title,audio_delete_date
+        from audio  where business_id=#{business_id} and audio_flag !='true'
+    </select>
+
+    <!--还原音频-->
+    <update id="rebackAudioByID" parameterType="int">
+        update audio set audio_flag='true',audio_delete_date=SYSDATE() where audio_id=#{audio_id}
+    </update>
+</mapper>

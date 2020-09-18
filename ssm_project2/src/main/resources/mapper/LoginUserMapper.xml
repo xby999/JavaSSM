@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qianfeng.dao.LoginUserDao">
+
+    <select id="selectByUsername" parameterType="string" resultType="com.qianfeng.pojo.LoginUser">
+        SELECT * FROM loginuser WHERE login_user_name = #{login_user_name};
+    </select>
+
+    <update id="updateUserName" parameterType="com.qianfeng.pojo.LoginUser">
+        update loginuser set login_user_name = #{login_user_name} where
+login_user_id = #{login_user_id}
+    </update>
+
+</mapper>

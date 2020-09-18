@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+
+<mapper namespace="com.qianfeng.dao.SystemUserDao">
+
+    <select id="selectBusinessUserAllInfo" resultType="com.qianfeng.pojo.Businessinfo">
+        SELECT bi.business_id,bi.business_info_name,bi.business_info_id,bi.business_info_legal_person_tel,
+        bi.business_info_legal_person,b.business_username
+        from businessinfo bi,business b
+        where bi.business_id = b.business_id
+    </select>
+
+    <select id="selectByUsername" parameterType="string" resultType="com.qianfeng.pojo.SystemUserAndUsername">
+        SELECT s.user_true_name,s.user_tel,s.user_sex,l.login_user_name,ls.login_pass_word
+         FROM loginuser l,systemuser s,loginpass ls
+				  where l.login_user_id = s.login_user_id
+					And l.login_user_name = #{login_user_name}
+					And ls.login_user_id =l.login_user_id
+    </select>
+
+    <select id="selectSystemUserAllInfo" resultType="com.qianfeng.pojo.SystemUserAndUsername">
+        select s.user_id,s.user_true_name,s.user_tel,s.user_sex,l.login_user_name
+        from systemuser s,loginuser l
+        where s.login_user_id = l.login_user_id
+    </select>
+
+    <select id="selectSystemUserByID" parameterType="int" resultType="com.qianfeng.pojo.SystemUserAndUsername">
+        select s.login_user_id,s.user_true_name,s.user_tel,s.user_sex,
+        l.login_user_name,p.login_pass_word from systemuser s,loginuser l,loginpass p
+        where s.login_user_id=l.login_user_id and l.login_user_id=p.login_user_id
+        and s.login_user_id=#{login_user_id}
+    </select>
+
+    <update id="updateAllData" parameterType="com.qianfeng.pojo.SystemUser">
+        update systemuser set user_true_name = #{user_true_name},user_tel=#{user_tel},user_sex=#{user_sex} where login_user_id =#{login_user_id}
+    </update>
+
+</mapper>

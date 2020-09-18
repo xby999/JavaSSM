@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.qianfeng.dao.BusinessinfoDao">
+
+    <!--##开辟该账户的商家信息-->
+    <insert id="insertBusinessInfo" parameterType="int">
+        INSERT into businessinfo (business_id) VALUES (#{business_id});
+    </insert>
+
+    <select id="selectBusinessInfoByID" parameterType="int" resultType="com.qianfeng.pojo.Businessinfo">
+        select b.business_username,i.business_info_name,i.business_info_legal_person,i.business_info_legal_person_tel,p.business_pass_word
+        from businessinfo i,business b,businesspass p
+        where  i.business_id = b.business_id and b.business_id=p.business_id and i.business_id=#{business_id}
+    </select>
+
+    <update id="updateAllData" parameterType="com.qianfeng.pojo.Businessinfo">
+        update business b,businessinfo i,businesspass p
+        set b.business_username= #{business_username},i.business_info_name=#{business_info_name},
+        i.business_info_legal_person=#{business_info_legal_person},i.business_info_legal_person_tel=#{business_info_legal_person_tel},
+        p.business_pass_word=#{business_pass_word}
+        where i.business_id = b.business_id  and b.business_id=p.business_id  and i.business_id=#{business_id}
+    </update>
+
+</mapper>
